@@ -450,12 +450,12 @@ a {
   transform: translateY(1px);
 }
 #icon {
-  margin-bottom: 1200%;
+  margin-bottom: 1980%;
 }
 .side-icons-left {
   position: absolute;
   left: 1%;
-  top: 118%;
+  top: 110%;
   transform: translateY(-50%);
   transform: scale(0.9);
   display: flex;

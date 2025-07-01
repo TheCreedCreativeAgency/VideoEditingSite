@@ -2,10 +2,12 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import "../styles/Header.css";
+import Reveal from "../hooks/Reveal";
 const Header = ({ navLinks = [] }) => {
   const publicUrl = process.env.PUBLIC_URL;
 
   return (
+<Reveal direction="left">
     <motion.header
       className="main-header"
       id="top"
@@ -30,6 +32,7 @@ const Header = ({ navLinks = [] }) => {
         </ul>
       </nav>
     </motion.header>
+    </Reveal>
   );
 };
 

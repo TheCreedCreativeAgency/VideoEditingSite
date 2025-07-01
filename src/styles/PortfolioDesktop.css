@@ -15,7 +15,6 @@
   z-index: 1000;
 }
 
-
 .video-modal-content {
   position: relative;
   width: 90%;
@@ -27,8 +26,8 @@
   align-items: center;
 }
 
-.portfolio-section{
-    margin:0 40px;
+.portfolio-section {
+  margin: 0 40px;
 }
 
 .full-screen-video {
@@ -48,9 +47,9 @@
   z-index: 1001;
   line-height: 1;
 }
-.minimize{
-    transform: scale(0.4);
-    position: relative;
+.minimize {
+  transform: scale(0.4);
+  position: relative;
 }
 
 /* ==========================================================================
@@ -63,10 +62,10 @@
    */
 .gallery-container {
   position: relative;
-  height: 500px;
-  width: 100%;
+  height: 910px;
+  width: 80%;
   perspective: 1200px;
-  /* margin-left: 100px; */
+  margin: 0 auto;
 }
 
 /* The direct parent for the animating thumbnail wrappers. */
@@ -74,7 +73,6 @@
   position: relative;
   width: 100%;
   height: 100%;
-
 }
 
 .nav-arrow {
@@ -169,7 +167,7 @@
 .main-wrapper .play-button {
   opacity: 1;
   transform: scale(1);
-  animation: heartbeat-glow 1.3s infinite ease-in-out;
+  animation: heartbeat-glow 2s infinite ease-in-out;
 }
 
 .play-button svg {
@@ -190,7 +188,7 @@
 .gallery.animating-prev .prev-wrapper,
 .gallery.animating-next .prev-wrapper,
 .gallery.animating-prev .next-wrapper {
-  animation-duration: 0.6s;
+  animation-duration: 0.35s;
   animation-timing-function: ease-in-out;
   animation-fill-mode: forwards;
 }
@@ -292,196 +290,194 @@
 }
 
 .flex-portfolio {
-    position: relative;
-    justify-content: center;
-    flex-direction: column;
-    margin-top: 4%;
-    gap: -30px;
-    margin-bottom: 20px;
-  }
+  position: relative;
+  justify-content: center;
+  flex-direction: column;
+  margin-top: 4%;
+  gap: -30px;
+  margin-bottom: 20px;
+}
 
-  /* ==========================================================================
+/* ==========================================================================
    6. Custom Video Player Modal (Add these new styles)
    ========================================================================== */
 
 /* --- Modal Open/Close Animation --- */
 .video-modal-overlay {
-    /* Starting state (invisible) */
-    opacity: 0;
-    transform: scale(0.95);
-    transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  /* When opening (remove is-closing class), it animates to this state */
-  .video-modal-overlay:not(.is-closing) {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  /* When closing, it animates back to the default invisible state */
-  .video-modal-overlay.is-closing {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-
-  .video-modal-content {
-    overflow: hidden; /* Important for containing the video and controls */
-    border-radius: 12px; /* Optional: adds a nice touch */
-  }
-
-  /* --- Hide Default Video Controls --- */
-  .full-screen-video {
-
-
+  /* Starting state (invisible) */
+  opacity: 0;
+  transform: scale(0.95);
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-  .full-screen-video::-webkit-media-controls {
-    display: none !important;
-  }
+/* When opening (remove is-closing class), it animates to this state */
+.video-modal-overlay:not(.is-closing) {
+  opacity: 1;
+  transform: scale(1);
+}
 
-  /* --- Custom Controls Wrapper --- */
-  .custom-video-controls {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 15px 25px 20px 25px;
-    display: flex;
-    flex-direction: column;
-    background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
-    opacity: 1;
-    transition: opacity 0.3s ease-in-out;
-  }
+/* When closing, it animates back to the default invisible state */
+.video-modal-overlay.is-closing {
+  opacity: 0;
+  transform: scale(0.95);
+}
 
-  /* Hide controls when video is playing and user is not interacting */
-  .full-screen-video:not(:hover) + .custom-video-controls {
-    /* You can enable this for a cleaner look, but for now we'll keep it simple */
-    /* opacity: 0; */
-  }
+.video-modal-content {
+  overflow: hidden; /* Important for containing the video and controls */
+  border-radius: 12px; /* Optional: adds a nice touch */
+}
 
-  /* --- Custom Progress Bar --- */
-  .progress-bar-container {
-    width: 100%;
-    height: 4px;
-    background-color: rgba(255, 255, 255, 0.25);
-    border-radius: 2px;
-    margin-bottom: 15px;
-    /* cursor: pointer; Future-proofing for seeking */
-  }
+/* --- Hide Default Video Controls --- */
+.full-screen-video {
+}
 
-  .progress-bar-fill {
-    height: 100%;
-    width: 100%; /* The width is controlled by transform */
-    background-color: #d2ad75;
-    border-radius: 2px;
-    transform-origin: left;
-    transform: scaleX(0); /* Initial state */
-    transition: transform 0.1s linear; /* Smooths out updates */
-  }
+.full-screen-video::-webkit-media-controls {
+  display: none !important;
+}
 
-  /* --- Custom Control Buttons --- */
-  .control-buttons-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
+/* --- Custom Controls Wrapper --- */
+.custom-video-controls {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 15px 25px 20px 25px;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+  opacity: 1;
+  transition: opacity 0.3s ease-in-out;
+}
 
-  .control-button {
-    background: none;
-    border: none;
-    padding: 0;
-    opacity: 0.8;
-    transition: opacity 0.2s, transform 0.2s;
-  }
+/* Hide controls when video is playing and user is not interacting */
+.full-screen-video:not(:hover) + .custom-video-controls {
+  /* You can enable this for a cleaner look, but for now we'll keep it simple */
+  /* opacity: 0; */
+}
 
-  .control-button:hover {
-    opacity: 1;
-    transform: scale(1.1);
-  }
+/* --- Custom Progress Bar --- */
+.progress-bar-container {
+  width: 100%;
+  height: 4px;
+  background-color: rgba(255, 255, 255, 0.25);
+  border-radius: 2px;
+  margin-bottom: 15px;
+  /* cursor: pointer; Future-proofing for seeking */
+}
 
-  .control-button img {
-    display: block;
-    width: 28px; /* Adjust size as needed */
-    height: 28px;
-  }
+.progress-bar-fill {
+  height: 100%;
+  width: 100%; /* The width is controlled by transform */
+  background-color: #d2ad75;
+  border-radius: 2px;
+  transform-origin: left;
+  transform: scaleX(0); /* Initial state */
+  transition: transform 0.1s linear; /* Smooths out updates */
+}
 
-  /* --- Mute Button Glow --- */
-  .mute-button:not(.muted) {
-    filter: drop-shadow(0 0 8px #d2ad75);
-  }
-
-  .control-buttons-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .control-button {
-    background: none;
-    border: none;
-    padding: 0;
-    opacity: 0.8;
-    transition: opacity 0.2s, transform 0.2s, filter 0.3s;
-    color: #d2ad75; /* This color will be inherited by the SVG's 'currentColor' */
-  }
-
-  .control-button:hover {
-    opacity: 1;
-    transform: scale(1.1);
-  }
-
-  /* Replace the old .control-button img rule with this */
-  .control-button svg {
-    display: block;
-    width: 28px;
-    height: 28px;
-  }
-
-  /* --- Mute Button Glow (Update class name) --- */
-  .mute-button.glowing {
-    filter: drop-shadow(0 0 8px #d2ad75);
-  }
-
-  /* This container now pushes its single item (the mute button) to the far right */
+/* --- Custom Control Buttons --- */
 .control-buttons-container {
-    display: flex;
-    justify-content: flex-end; /* IMPORTANT: Changed from space-between */
-    align-items: center;
-  }
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
-  /* General styles for ALL control buttons */
-  .control-button {
-    background: none;
-    border: none;
-    padding: 5px; /* Added padding for a better click area */
-    border-radius: 50%;
-    cursor: pointer;
-    opacity: 0.8;
-    transition: all 0.2s ease-in-out;
-    color: #d2ad75;
-  }
+.control-button {
+  background: none;
+  border: none;
+  padding: 0;
+  opacity: 0.8;
+  transition: opacity 0.2s, transform 0.2s;
+}
 
-  .control-button:hover {
-    opacity: 1;
-    transform: scale(1.1);
-    background-color: rgba(0,0,0,0.3); /* Subtle background on hover */
-  }
+.control-button:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
 
-  .control-button svg {
-    display: block;
-    width: 28px;
-    height: 28px;
-  }
+.control-button img {
+  display: block;
+  width: 28px; /* Adjust size as needed */
+  height: 28px;
+}
 
-  /* --- Mute Button Glow (No changes here, just for context) --- */
-  .mute-button.glowing {
-    filter: drop-shadow(0 0 8px #d2ad75);
-  }
+/* --- Mute Button Glow --- */
+.mute-button:not(.muted) {
+  filter: drop-shadow(0 0 8px #d2ad75);
+}
 
-  /* --- NEW STYLES: Specific positioning for the close button --- */
-  .control-button.close-button {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    z-index: 10;
-  }
+.control-buttons-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.control-button {
+  background: none;
+  border: none;
+  padding: 0;
+  opacity: 0.8;
+  transition: opacity 0.2s, transform 0.2s, filter 0.3s;
+  color: #d2ad75; /* This color will be inherited by the SVG's 'currentColor' */
+}
+
+.control-button:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+/* Replace the old .control-button img rule with this */
+.control-button svg {
+  display: block;
+  width: 28px;
+  height: 28px;
+}
+
+/* --- Mute Button Glow (Update class name) --- */
+.mute-button.glowing {
+  filter: drop-shadow(0 0 8px #d2ad75);
+}
+
+/* This container now pushes its single item (the mute button) to the far right */
+.control-buttons-container {
+  display: flex;
+  justify-content: flex-end; /* IMPORTANT: Changed from space-between */
+  align-items: center;
+}
+
+/* General styles for ALL control buttons */
+.control-button {
+  background: none;
+  border: none;
+  padding: 5px; /* Added padding for a better click area */
+  border-radius: 50%;
+  opacity: 0.8;
+  transition: all 0.2s ease-in-out;
+  color: #d2ad75;
+}
+
+.control-button:hover {
+  opacity: 1;
+  transform: scale(1.1);
+  background-color: rgba(0, 0, 0, 0.3); /* Subtle background on hover */
+}
+
+.control-button svg {
+  display: block;
+  width: 28px;
+  height: 28px;
+}
+
+/* --- Mute Button Glow (No changes here, just for context) --- */
+.mute-button.glowing {
+  filter: drop-shadow(0 0 8px #d2ad75);
+}
+
+/* --- NEW STYLES: Specific positioning for the close button --- */
+.control-button.close-button {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  z-index: 10;
+}

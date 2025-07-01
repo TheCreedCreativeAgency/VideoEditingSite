@@ -45,7 +45,7 @@ const Reveal = ({
       initial="hidden"
       whileInView="visible"
       // Note: `once: false` is important for this to work on scroll-out
-      viewport={{ once: false, amount: 0.2 }}
+      viewport={{ once: false, amount: 0.3 }}
       transition={{
         type: "spring",
         stiffness: 120,
