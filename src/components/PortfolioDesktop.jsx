@@ -2,12 +2,13 @@ import React, { useState, useEffect, useRef } from "react";
 import Reveal from "../hooks/Reveal";
 import "../styles/PortfolioDesktop.css";
 
-const MinimizeIcon = (props) => (
-    <svg {...props} viewBox="0 0 24 24" fill="none" stroke="#d2ad75" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M8 3H5a2 2 0 0 0-2 2v3m15 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
-    </svg>
-  );
+const MinimizeIconCustom = (props) => (
+    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 9h4m0 0V5m0 4L4 4m15 5h-4m0 0V5m0 4 5-5M5 15h4m0 0v4m0-4-5 5m15-5h-4m0 0v4m0-4 5 5"/>
+</svg>
 
+
+  );
   const SpeakerIcon = (props) => (
     <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
@@ -243,16 +244,21 @@ useEffect(() => {
         <div className={`video-modal-overlay ${isModalClosing ? 'is-closing' : ''}`} onClick={closeModal}>
           <div className="video-modal-content" onClick={(e) => e.stopPropagation()}>
             <video ref={videoRef} src={modalVideoSrc} autoPlay playsInline className="full-screen-video" onTimeUpdate={handleTimeUpdate} onEnded={closeModal} onClick={handlePlayPause} />
+
+            {/* === STRUCTURAL CHANGE 1: Close button is now a direct child of the content wrapper === */}
+            <button className="control-button close-button" onClick={closeModal} title="Close (Esc)">
+              <MinimizeIconCustom />
+            </button>
+
             <div className="custom-video-controls">
               <div className="progress-bar-container">
                 <div className="progress-bar-fill" style={{ transform: `scaleX(${progress / 100})` }}></div>
               </div>
+
+              {/* === STRUCTURAL CHANGE 2: This container now only holds the mute button === */}
               <div className="control-buttons-container">
                 <button className={`control-button mute-button ${!isMuted ? 'glowing' : ''}`} onClick={handleMuteToggle} title={isMuted ? 'Unmute' : 'Mute'}>
                   {isMuted ? <MuteIcon /> : <SpeakerIcon />}
-                </button>
-                <button className="control-button close-button" onClick={closeModal} title="Close">
-                  <MinimizeIcon />
                 </button>
               </div>
             </div>

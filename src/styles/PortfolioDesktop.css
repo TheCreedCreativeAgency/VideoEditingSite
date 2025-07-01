@@ -169,7 +169,7 @@
 .main-wrapper .play-button {
   opacity: 1;
   transform: scale(1);
-  animation: heartbeat-glow 2.5s infinite ease-in-out;
+  animation: heartbeat-glow 1.3s infinite ease-in-out;
 }
 
 .play-button svg {
@@ -440,4 +440,48 @@
   /* --- Mute Button Glow (Update class name) --- */
   .mute-button.glowing {
     filter: drop-shadow(0 0 8px #d2ad75);
+  }
+
+  /* This container now pushes its single item (the mute button) to the far right */
+.control-buttons-container {
+    display: flex;
+    justify-content: flex-end; /* IMPORTANT: Changed from space-between */
+    align-items: center;
+  }
+
+  /* General styles for ALL control buttons */
+  .control-button {
+    background: none;
+    border: none;
+    padding: 5px; /* Added padding for a better click area */
+    border-radius: 50%;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: all 0.2s ease-in-out;
+    color: #d2ad75;
+  }
+
+  .control-button:hover {
+    opacity: 1;
+    transform: scale(1.1);
+    background-color: rgba(0,0,0,0.3); /* Subtle background on hover */
+  }
+
+  .control-button svg {
+    display: block;
+    width: 28px;
+    height: 28px;
+  }
+
+  /* --- Mute Button Glow (No changes here, just for context) --- */
+  .mute-button.glowing {
+    filter: drop-shadow(0 0 8px #d2ad75);
+  }
+
+  /* --- NEW STYLES: Specific positioning for the close button --- */
+  .control-button.close-button {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    z-index: 10;
   }
