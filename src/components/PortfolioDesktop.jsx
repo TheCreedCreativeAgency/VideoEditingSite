@@ -1,103 +1,181 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Reveal from "../hooks/Reveal";
-// import "../styles/index.css";
 import "../styles/PortfolioDesktop.css";
 
+const MinimizeIcon = (props) => (
+    <svg {...props} viewBox="0 0 24 24" fill="none" stroke="#d2ad75" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M8 3H5a2 2 0 0 0-2 2v3m15 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
+    </svg>
+  );
+
+  const SpeakerIcon = (props) => (
+    <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+      <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+    </svg>
+  );
+
+  const MuteIcon = (props) => (
+    <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+      <line x1="23" y1="9" x2="17" y2="15"></line>
+      <line x1="17" y1="9" x2="23" y2="15"></line>
+    </svg>
+  );
+
 const slides = [
-    { mainVideo: "vid2.mp4", thumbnail: "./thumbnail2.jpg" },
-    { mainVideo: "vid6.mp4", thumbnail: "./thumbnail6.jpg" },
-    { mainVideo: "vid5.mp4", thumbnail: "./thumbnail5.jpg" },
-    { mainVideo: "vid4.mp4", thumbnail: "./thumbnail4.jpg" },
+  { mainVideo: "vid2.mp4", thumbnail: "./thumbnail2.jpg" },
+  { mainVideo: "vid6.mp4", thumbnail: "./thumbnail6.jpg" },
+  { mainVideo: "vid5.mp4", thumbnail: "./thumbnail5.jpg" },
+  { mainVideo: "vid4.mp4", thumbnail: "./thumbnail4.jpg" },
   { mainVideo: "vid1.mp4", thumbnail: "./thumbnail1.jpg" },
   { mainVideo: "vid3.mp4", thumbnail: "./thumbnail3.jpg" },
 ];
 
 const PortfolioDesktop = () => {
   const publicUrl = process.env.PUBLIC_URL;
+
+  // --- Gallery State ---
   const [currentIndex, setCurrentIndex] = useState(0);
   const [animationDirection, setAnimationDirection] = useState(null);
-  const [modalVideoSrc, setModalVideoSrc] = useState(null);
 
-  // This hook now handles the state update AFTER the animation is complete.
-  useEffect(() => {
-    // Only run this logic if an animation has been triggered.
+  // --- Video Modal State ---
+  const [modalVideoSrc, setModalVideoSrc] = useState(null);
+  const [isModalClosing, setIsModalClosing] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [isMuted, setIsMuted] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const videoRef = useRef(null);
+
+// --- Main Gallery Animation Logic ---
+useEffect(() => {
     if (animationDirection) {
       const timer = setTimeout(() => {
-        // 1. Update the index to match the new visual state.
         if (animationDirection === 'next') {
-          setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
+          setCurrentIndex((prev) => (prev + 1) % slides.length);
         } else if (animationDirection === 'prev') {
-          setCurrentIndex((prevIndex) => (prevIndex - 1 + slides.length) % slides.length);
+          setCurrentIndex((prev) => (prev - 1 + slides.length) % slides.length);
         }
-
-        // 2. Reset the animation state so it can be triggered again.
         setAnimationDirection(null);
-      }, 600); // This MUST match the CSS animation duration.
-
+      }, 600); // Must match CSS animation duration
       return () => clearTimeout(timer);
     }
-  }, [animationDirection]); // This effect depends only on the animation direction.
+  }, [animationDirection]);
 
-  // Starts the "next" animation. Does NOT update the index here anymore.
-  const handleNext = () => {
-    if (!animationDirection) {
-      setAnimationDirection("next");
-    }
-  };
+  // --- Modal & Video Player Logic ---
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (!modalVideoSrc) return; // Do nothing if modal isn't open
 
-  // Starts the "previous" animation. Does NOT update the index here anymore.
-  const handlePrev = () => {
-    if (!animationDirection) {
-      setAnimationDirection("prev");
-    }
-  };
+      switch (e.key) {
+        case 'Escape':
+          closeModal();
+          break;
+        case 'ArrowRight':
+          navigateToVideoInModal('next');
+          break;
+        case 'ArrowLeft':
+          navigateToVideoInModal('prev');
+          break;
+        default:
+          break;
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [modalVideoSrc, currentIndex]); // Rerun if modal or index changes
 
+  // Main gallery navigation
+  const handleNext = () => !animationDirection && setAnimationDirection("next");
+  const handlePrev = () => !animationDirection && setAnimationDirection("prev");
+
+  // Open the modal
   const openVideoModal = (videoFileName) => {
     setModalVideoSrc(`${publicUrl}/${videoFileName}`);
+    setIsPlaying(true);
   };
 
+  // Close the modal with animation
   const closeModal = () => {
-    setModalVideoSrc(null);
+    if (isModalClosing) return;
+    setIsModalClosing(true);
+    setTimeout(() => {
+      setModalVideoSrc(null);
+      setIsModalClosing(false);
+    }, 500); // Must match CSS animation duration
   };
 
-  // --- Calculated values for rendering ---
+  // NEW: Navigate videos while modal is open
+  const navigateToVideoInModal = (direction) => {
+    const newIndex = direction === 'next'
+      ? (currentIndex + 1) % slides.length
+      : (currentIndex - 1 + slides.length) % slides.length;
+
+    setCurrentIndex(newIndex); // Sync background gallery
+    setModalVideoSrc(`${publicUrl}/${slides[newIndex].mainVideo}`);
+    setProgress(0); // Reset progress bar
+    setIsPlaying(true); // Ensure new video plays
+  };
+
+  // Video player controls
+  const handlePlayPause = () => {
+    if (videoRef.current?.paused) {
+      videoRef.current.play();
+      setIsPlaying(true);
+    } else {
+      videoRef.current?.pause();
+      setIsPlaying(false);
+    }
+  };
+
+  const handleMuteToggle = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = !videoRef.current.muted;
+      setIsMuted(videoRef.current.muted);
+    }
+  };
+
+  const handleTimeUpdate = () => {
+    if (videoRef.current) {
+      setProgress((videoRef.current.currentTime / videoRef.current.duration) * 100);
+    }
+  };
+
+  // --- JSX Rendering ---
   const currentSlide = slides[currentIndex];
   const prevIndex = (currentIndex - 1 + slides.length) % slides.length;
   const nextIndex = (currentIndex + 1) % slides.length;
+  const galleryClassName = `gallery ${animationDirection ? `animating-${animationDirection}` : ""}`;
 
-  const galleryClassName = `gallery ${
-    animationDirection ? `animating-${animationDirection}` : ""
-  }`;
-return(
-  <section className="portfolio-section" id="portfolio">
-  <div className="container" style={{ overflow: "hidden" }}>
-    <Reveal>
-      <div className="testimonial">
-        <div className="image-container">
-          <img src={`${publicUrl}/small.png`} alt="GigaChad profile" />
-        </div>
-        <div className="testimonial-text">
-          <span className="testimonial-author">GigaChad Says:</span>
-          <p>
-            Asked an edit and got a masterpiece. This guy knows what he's
-            doing!
-          </p>
-        </div>
-      </div>
-
-      <img
-        src={`${publicUrl}/down.png`}
-        className="nav-chevron down"
-        alt="down arrow"
-      />
-    </Reveal>
-
+  return (
+<section className="portfolio-section" id="portfolio">
+      <div className="container" style={{ overflow: "hidden" }}>
+        <Reveal>
+          <div className="testimonial">
+            <div className="image-container">
+              <img src={`${publicUrl}/small.png`} alt="GigaChad profile" />
+            </div>
+            <div className="testimonial-text">
+              <span className="testimonial-author">GigaChad Says:</span>
+              <p>
+                Asked an edit and got a masterpiece. This guy knows what he's
+                doing!
+              </p>
+            </div>
+          </div>
+          <img
+            src={`${publicUrl}/down.png`}
+            className="nav-chevron down"
+            alt="down arrow"
+          />
+        </Reveal>
         <Reveal>
           <div className="gallery-container">
             <div className={galleryClassName}>
+              {/* Previous Video Thumbnail (left side) */}
               <div
                 className="thumbnail-wrapper prev-wrapper"
-                onClick={handlePrev}
+                onClick={handlePrev} // Click here to go to previous
               >
                 <img
                   key={`prev-thumb-${prevIndex}`}
@@ -106,6 +184,7 @@ return(
                 />
               </div>
 
+              {/* Main Video Thumbnail (center) */}
               <div className="thumbnail-wrapper main-wrapper">
                 <img
                   key={`main-thumb-${currentIndex}`}
@@ -118,14 +197,15 @@ return(
                 >
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="12" cy="12" r="10" stroke="#d2ad75" strokeWidth="1"/>
-                    <path d="M9.5 8L16.5 12L9.5 16V8Z" fill="#d2ad75"/>
+                    <path d="M9.5 8L16.5 12L9.5 16V8Z" fill="#FFD700"/>
                   </svg>
                 </button>
               </div>
 
+              {/* Next Video Thumbnail (right side) */}
               <div
                 className="thumbnail-wrapper next-wrapper"
-                onClick={handleNext}
+                onClick={handleNext} // Click here to go to next
               >
                 <img
                   key={`next-thumb-${nextIndex}`}
@@ -157,32 +237,30 @@ return(
         </Reveal>
       </div>
 
-      {/* Full-screen video modal */}
+
+      {/* --- Custom Video Player Modal --- */}
       {modalVideoSrc && (
-        <div className="video-modal-overlay" onClick={closeModal}>
-          <div
-            className="video-modal-content"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <video
-              src={modalVideoSrc}
-              controls
-              autoPlay
-              playsInline
-              className="full-screen-video"
-              onEnded={closeModal}
-            />
-            <button className="close-modal-button" onClick={closeModal}>
-              <img src="./minimize.png" alt="" className="minimize" />
-            </button>
-            {/* add here a button for muting, give it a glow of d2ad75 */}
-            {/* there should be no other buttons, only simplistic and the progress bar in the video should also be customize of my color which is d2ad75 */}
+        <div className={`video-modal-overlay ${isModalClosing ? 'is-closing' : ''}`} onClick={closeModal}>
+          <div className="video-modal-content" onClick={(e) => e.stopPropagation()}>
+            <video ref={videoRef} src={modalVideoSrc} autoPlay playsInline className="full-screen-video" onTimeUpdate={handleTimeUpdate} onEnded={closeModal} onClick={handlePlayPause} />
+            <div className="custom-video-controls">
+              <div className="progress-bar-container">
+                <div className="progress-bar-fill" style={{ transform: `scaleX(${progress / 100})` }}></div>
+              </div>
+              <div className="control-buttons-container">
+                <button className={`control-button mute-button ${!isMuted ? 'glowing' : ''}`} onClick={handleMuteToggle} title={isMuted ? 'Unmute' : 'Mute'}>
+                  {isMuted ? <MuteIcon /> : <SpeakerIcon />}
+                </button>
+                <button className="control-button close-button" onClick={closeModal} title="Close">
+                  <MinimizeIcon />
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}
     </section>
-
-);
+  );
 };
 
 export default PortfolioDesktop;
