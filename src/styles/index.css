@@ -301,6 +301,8 @@ a {
 }
 .cee {
   margin-top: 5px;
+  animation: ambient-glow 5s infinite ease-in-out;
+/*  */
   align-items: center;
 }
 .logo-down {
@@ -451,8 +453,11 @@ a {
 }
 #icon {
   margin-bottom: 1980%;
+  animation: ambient-glow 5s infinite ease-in-out;
 }
 .side-icons-left {
+  animation: ambient-glow 5s infinite ease-in-out;
+
   position: absolute;
   left: 1%;
   top: 110%;
@@ -889,5 +894,24 @@ a {
   .flex-portfolio img,
   .gallery .main-image {
     transition: opacity 0.3s ease-in-out;
+  }
+}
+@keyframes ambient-glow {
+  /* The "resting" state of the glow */
+  0%, 100% {
+    filter:
+      /* Inner, more solid glow */
+      drop-shadow(0 0 10px rgba(210, 173, 117, 0.4))
+      /* Outer, softer haze */
+      drop-shadow(0 0 30px rgba(255, 215, 0, 0.2));
+  }
+
+  /* The "peak" state of the glow */
+  50% {
+    filter:
+      /* Inner glow expands and intensifies */
+      drop-shadow(0 0 20px rgba(210, 173, 117, 0.7))
+      /* Outer haze expands and brightens */
+      drop-shadow(0 0 45px rgba(255, 215, 0, 0.4));
   }
 }
