@@ -6,7 +6,9 @@ const ContactSection = () => {
   return (
     <>
       <div className="cee" id="contact">
+        <a href="#top">
         <img className="logo-down" src={`${publicUrl}/icon.png`} alt="logo" />
+        </a>
       </div>
       <section className="contact-section">
         <span id="contact" className="section-anchor"></span>

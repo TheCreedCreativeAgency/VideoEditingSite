@@ -9,7 +9,9 @@ const SideWidgets = () => {
       {/* Apply the className directly to the Reveal component */}
       <div className="side-icons-left" direction="right">
         <Reveal >
+          <a href="#top">
         <img src={`${publicUrl}/icon.png`} alt="Icon" id="icon" />
+        </a>
         </Reveal>
         <Reveal >
         <a href="tel:+923020887777">

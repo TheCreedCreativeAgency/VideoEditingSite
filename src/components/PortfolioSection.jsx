@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import Reveal from "../hooks/Reveal";
+import useIntersectionObserver from "../hooks/userIntersectionObserver";
 import "../styles/index.css";
 
 const slides = [
@@ -28,9 +29,37 @@ const PortfolioSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFading, setIsFading] = useState(false);
   const mainVideoRef = useRef(null);
+  const [isPlaying, setIsPlaying] = useState(true);
 
+  const isVideoVisible = useIntersectionObserver(mainVideoRef, { threshold: 0.5 });
+  const handlePlayPause = () => {
+    if (mainVideoRef.current?.paused) {
+      mainVideoRef.current.play();
+      setIsPlaying(true);
+    } else {
+      mainVideoRef.current?.pause();
+      setIsPlaying(false);
+    }
+  };
   const [canVideoPlay, setCanVideoPlay] = useState(false);
+  useEffect(() => {
+    const videoElement = mainVideoRef.current;
+    if (!videoElement) return;
 
+    if (isVideoVisible) {
+      videoElement.play().catch(error => console.warn("Autoplay was prevented:", error));
+      setIsPlaying(true);
+    } else {
+      videoElement.pause();
+      setIsPlaying(false);
+    }
+  }, [isVideoVisible]); // This effect ONLY runs when visibility changes
+  useEffect(() => {
+    const videoElement = mainVideoRef.current;
+    if (videoElement) {
+        videoElement.load();
+    }
+  }, [currentIndex]);
   useEffect(() => {
     if (isFading) {
       const timer = setTimeout(() => setIsFading(false), 300);
@@ -51,40 +80,44 @@ const PortfolioSection = () => {
   }, [isFading, currentIndex, canVideoPlay]);
 
   const handleNext = () => {
-    if (!isFading) {
-      setIsFading(true);
-
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
-    }
+    const newIndex = (currentIndex + 1) % slides.length;
+    changeSlide(newIndex);
   };
 
   const handlePrev = () => {
-    if (!isFading) {
-      setIsFading(true);
-
-      setCurrentIndex(
-        (prevIndex) => (prevIndex - 1 + slides.length) % slides.length
-      );
-    }
+    const newIndex = (currentIndex - 1 + slides.length) % slides.length;
+    changeSlide(newIndex);
   };
 
   const handleSideVideoClick = (indexToMakeMain) => {
-    if (!isFading && indexToMakeMain !== currentIndex) {
-      setIsFading(true);
-      setCurrentIndex(indexToMakeMain);
+    if (indexToMakeMain !== currentIndex) {
+      changeSlide(indexToMakeMain);
     }
   };
 
+  const changeSlide = (newIndex) => {
+    if (isFading) return; // Prevent changes during a transition
+
+    setIsFading(true); // Start fading out the current video
+
+    // Wait for the fade-out animation to complete before changing the source
+    setTimeout(() => {
+      setCurrentIndex(newIndex);
+      // The new video will be loaded, and the onLoadedData event will handle the fade-in
+    }, 400); // This duration should match your CSS transition time
+  };
   const currentSlide = slides[currentIndex];
 
   const prevIndex = (currentIndex - 1 + slides.length) % slides.length;
   const nextIndex = (currentIndex + 1) % slides.length;
-
+  const handleVideoLoaded = () => {
+    setIsFading(false); // Fade the new video in now that it's ready
+  };
   return (
     <section className="portfolio-section" id="portfolio">
-      <div className="container" style={{ overflow: "hidden" }}>
+      <div className="container"  >
         <Reveal>
-          <div className="testimonial">
+          <div className="testimonial" >
             <div className="image-container">
               <img src={`${publicUrl}/small.png`} alt="GigaChad profile" />
             </div>
@@ -127,7 +160,7 @@ const PortfolioSection = () => {
               className="side-image"
               muted
               playsInline
-              preload="auto"
+              preload="metadata"
               onClick={() => handleSideVideoClick(prevIndex)}
               style={{ zIndex: -1 }}
             />
@@ -138,10 +171,11 @@ const PortfolioSection = () => {
               ref={mainVideoRef}
               src={`${publicUrl}/${currentSlide.mainVideo}`}
               className="main-image"
-              autoPlay
               playsInline
               preload="auto"
-              style={{ opacity: isFading ? 0 : 1, zIndex: -100 }}
+              style={{ opacity: isFading ? 0 : 1, transition: 'opacity 0.3s ease-in-out' }} // FIX: ensure transition is here              onClick={handlePlayPause}
+              onLoadedData={handleVideoLoaded} // FIX: This is the key to the smooth transition
+          onClick={handlePlayPause}
             />
 
             {/* Next Video (right side) */}
@@ -151,7 +185,7 @@ const PortfolioSection = () => {
               className="side-image"
               muted
               playsInline
-              preload="auto"
+              preload="metadata"
               onClick={() => handleSideVideoClick(nextIndex)}
             />
 

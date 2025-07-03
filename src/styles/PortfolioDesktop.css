@@ -109,7 +109,7 @@
   opacity: 0.5;
   filter: blur(4px);
   z-index: 1;
-  cursor: pointer;
+
 
   animation: subtle-peek-left 4s ease-in-out infinite;
 }
@@ -119,7 +119,7 @@
   opacity: 1;
   filter: blur(0);
   z-index: 2;
-  cursor: default;
+
 }
 
 .next-wrapper {
@@ -127,7 +127,6 @@
   opacity: 0.5;
   filter: blur(4px);
   z-index: 1;
-  cursor: pointer;
 
   animation: subtle-peek-right 4s ease-in-out infinite;
 }
@@ -237,25 +236,25 @@
 }
 
 @keyframes heartbeat-glow {
+  /* Start State: Normal size, subtle glow */
   0% {
     transform: scale(1);
     filter: drop-shadow(0 0 4px #d2ad75)
-      drop-shadow(0 0 8px rgba(255, 215, 0, 0.4));
+            drop-shadow(0 0 8px rgba(255, 215, 0, 0.4));
   }
-  30% {
+
+  /* Peak State: Larger size, intense glow at the halfway point */
+  50% {
     transform: scale(1.15);
     filter: drop-shadow(0 0 12px #d2ad75)
-      drop-shadow(0 0 20px rgba(255, 215, 0, 1));
+            drop-shadow(0 0 20px rgba(255, 215, 0, 1));
   }
-  65% {
-    transform: scale(1);
-    filter: drop-shadow(0 0 4px #d2ad75)
-      drop-shadow(0 0 8px rgba(255, 215, 0, 0.4));
-  }
+
+  /* End State: Same as start, to allow for a smooth infinite loop */
   100% {
     transform: scale(1);
     filter: drop-shadow(0 0 4px #d2ad75)
-      drop-shadow(0 0 8px rgba(255, 215, 0, 0.4));
+            drop-shadow(0 0 8px rgba(255, 215, 0, 0.4));
   }
 }
 
