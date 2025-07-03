@@ -147,7 +147,7 @@
 .main-wrapper .play-button {
   opacity: 1;
   transform: scale(1);
-  animation: heartbeat-glow 1.8s infinite ease-in-out;
+  animation: heartbeat-glow 2.2s infinite ease-in-out;
 }
 
 .play-button svg {
