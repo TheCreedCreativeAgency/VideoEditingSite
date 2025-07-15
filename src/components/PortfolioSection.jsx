@@ -116,7 +116,7 @@ const PortfolioSection = () => {
   return (
     <section className="portfolio-section" id="portfolio">
       <div className="container"  >
-        <Reveal>
+        {/* <Reveal>
           <div className="testimonial" >
             <div className="image-container">
               <img src={`${publicUrl}/small.png`} alt="GigaChad profile" />
@@ -137,7 +137,7 @@ const PortfolioSection = () => {
             className="nav-chevron down"
             alt="down arrow"
           />
-        </Reveal>
+        </Reveal> */}
 
         <Reveal
           onRevealComplete={() => setCanVideoPlay(true)}

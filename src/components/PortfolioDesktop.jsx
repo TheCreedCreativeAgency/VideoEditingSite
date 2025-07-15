@@ -194,7 +194,7 @@ const PortfolioDesktop = () => {
   return (
     <section className="portfolio-section" id="portfolio">
       <div className="container" style={{ overflow: "hidden" }}>
-        <Reveal>
+        {/* <Reveal>
           <div className="testimonial">
             <div className="image-container">
               <img src={`${publicUrl}/small.png`} alt="GigaChad profile" />
@@ -212,7 +212,7 @@ const PortfolioDesktop = () => {
             className="nav-chevron down"
             alt="down arrow"
           />
-        </Reveal>
+        </Reveal> */}
         <Reveal>
           <div className="gallery-container">
             <div className={galleryClassName}>
