@@ -1,0 +1,41 @@
+.main-header {
+  gap: 70px;
+  padding: 45px 10px;
+  justify-content: flex-start;
+}
+.main-header .logo a {
+  font-size: 2rem;
+  animation: ambient-glow 5s infinite ease-in-out;
+}
+
+.logo{
+  animation: ambient-glow 5s infinite ease-in-out;
+
+}
+.main-header nav ul {
+  list-style: none;
+  display: flex;
+  gap: 40px;
+}
+.main-header nav a {
+  font-size: 20px;
+  letter-spacing: 1px;
+  transition: color 0.3s;
+}
+.main-header nav a:hover {
+  color: var(--text-white);
+}
+
+
+@keyframes ambient-glow {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 10px rgba(210, 173, 117, 0.4))
+      drop-shadow(0 0 30px rgba(255, 215, 0, 0.2));
+  }
+
+  50% {
+    filter: drop-shadow(0 0 20px rgba(210, 173, 117, 0.7))
+      drop-shadow(0 0 45px rgba(255, 215, 0, 0.4));
+  }
+}
