@@ -1,0 +1,99 @@
+/* --- Custom Video.js Skin --- */
+.vjs-custom-skin {
+    background-color: #000;
+    font-family: Arial, sans-serif;
+  }
+  .vjs-custom-skin .vjs-big-play-button {
+    display: none !important;
+  }
+  .vjs-custom-skin .vjs-control-bar {
+    background: rgba(0, 0, 0, 0.3) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transition: opacity 0.3s ease;
+    height: 60px;
+    display: flex;
+    align-items: center;
+  }
+  .vjs-custom-skin.vjs-user-inactive .vjs-control-bar {
+    opacity: 0 !important;
+  }
+  .vjs-custom-skin .vjs-control-bar > * {
+    display: none;
+  }
+  .vjs-custom-skin .vjs-control-bar .vjs-play-control,
+  .vjs-custom-skin .vjs-control-bar .vjs-progress-control,
+  .vjs-custom-skin .vjs-control-bar .vjs-volume-panel,
+  .vjs-custom-skin .vjs-control-bar .vjs-fullscreen-control {
+    display: flex;
+    align-items: center;
+  }
+  .vjs-custom-skin .vjs-control {
+    width: 50px;
+    cursor: pointer;
+  }
+  .vjs-custom-skin .vjs-control .vjs-icon-placeholder::before {
+    content: '' !important;
+    font-size: 0;
+  }
+  .vjs-custom-skin .vjs-control .vjs-icon-placeholder {
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 24px 24px;
+  }
+
+  /* --- Icon Definitions using CSS Variables --- */
+  .vjs-custom-skin.vjs-paused .vjs-play-control .vjs-icon-placeholder {
+    background-image: var(--icon-play);
+  }
+  .vjs-custom-skin.vjs-playing .vjs-play-control .vjs-icon-placeholder {
+    background-image: var(--icon-pause);
+  }
+  .vjs-custom-skin .vjs-volume-panel .vjs-icon-placeholder {
+    background-image: var(--icon-volume-on);
+  }
+  .vjs-custom-skin .vjs-volume-panel.vjs-volume-muted .vjs-icon-placeholder {
+    background-image: var(--icon-volume-off);
+  }
+  .vjs-custom-skin .vjs-fullscreen-control .vjs-icon-placeholder {
+    background-image: var(--icon-fullscreen-enter);
+  }
+  .vjs-custom-skin.vjs-fullscreen .vjs-fullscreen-control .vjs-icon-placeholder {
+    background-image: var(--icon-fullscreen-exit);
+  }
+
+  /* Progress bar styling */
+  .vjs-custom-skin .vjs-progress-control {
+    position: absolute; left: 70px; right: 120px; width: auto; top: 50%;
+    transform: translateY(-50%); height: 4px;
+  }
+  .vjs-custom-skin .vjs-progress-holder {
+    height: 100%; background: rgba(255, 255, 255, 0.3);
+  }
+  .vjs-custom-skin .vjs-play-progress, .vjs-custom-skin .vjs-load-progress {
+    background: #D4AF37; height: 100%;
+  }
+  .vjs-custom-skin .vjs-play-progress:before {
+    display: none;
+  }
+
+  /* Position controls */
+  .vjs-custom-skin .vjs-volume-panel { position: absolute; right: 60px; }
+  .vjs-custom-skin .vjs-fullscreen-control { position: absolute; right: 10px; }
+  .vjs-custom-skin .vjs-volume-bar { display: none !important; }
+
+  /* Modal styling */
+  .video-modal-fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #000; /* Black background */
+    z-index: 9999999999; /* Ensure it's on top of everything */
+    display: flex; /* Optional: Good for centering if needed */
+    justify-content: center;
+    align-items: center;
+  }
